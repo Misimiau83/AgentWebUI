@@ -1,11 +1,9 @@
-# AgentWebUI behind Caddy (HTTPS). Put PASSWORD, providers and agents in .env next to this file, set DOMAIN,
-# then: docker compose up -d. Sign agents in once: docker compose exec app claude  (and: codex login --device-auth)
-# It pulls the published image (AGENTWEBUI_TAG picks the tag, e.g. slim or edge); --build builds this checkout.
 services:
   app:
-    image: ghcr.io/hackershostel/agentwebui:${AGENTWEBUI_TAG:-latest}
     build: .
     restart: unless-stopped
+    ports:
+      - "3000:3000"   # <-- AÑADE ESTA LÍNEA
     env_file: .env
     environment:
       HOST: 0.0.0.0
@@ -15,20 +13,10 @@ services:
       TRUST_PROXY: "true"
     volumes:
       - data:/data
-      - ./work:/work
+      - work:/work
       - home:/home/agentwebui
-  caddy:
-    image: caddy:2
-    restart: unless-stopped
-    ports: ["80:80", "443:443"]
-    environment:
-      DOMAIN: ${DOMAIN:?set DOMAIN, the name that points at this server}
-      UPSTREAM: app:3000
-    volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy:/data
-    depends_on: [app]
+
 volumes:
   data:
+  work:
   home:
-  caddy:
