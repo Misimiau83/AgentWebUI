@@ -15,7 +15,7 @@ services:
       TRUST_PROXY: "true"
     volumes:
       - data:/data
-      - ./work:/work
+      - work:/work
       - home:/home/agentwebui
   caddy:
     image: caddy:2
@@ -32,3 +32,4 @@ volumes:
   data:
   home:
   caddy:
+  work:
