@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/hackershostel/agentwebui:${AGENTWEBUI_TAG:-latest}
+    build: .
     restart: unless-stopped
     env_file: .env
     environment:
